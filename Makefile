@@ -19,7 +19,7 @@ BINS=$(patsubst src/%.c, $(ELFDIR)/%.elf, $(SRCS))
 ELFDIR=elves
 ELVES=$(addprefix $(ELFDIR)/,$(notdir  $(SRCS:.c=.elf)))
 
-CLFAGS = -I . -I $(INC_DIR) -mmcu=$(DEVICE) -g -02
+CFLAGS = -I . -I $(INC_DIR) -mmcu=$(DEVICE) -g
 LFLAGS = -L . -L $(INC_DIR) -T $(DEVICE).ld
 
 # mspdebug driver
@@ -32,6 +32,10 @@ $(ELFDIR)/%.elf: src/%.c | $(ELFDIR)
 
 $(ELFDIR):
 	mkdir -p $(ELFDIR)
+
+# show compiler help menu
+help:
+	$(CC) -v --help
 
 # upload to baord
 # USAGE: make install a=binary
