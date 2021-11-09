@@ -1,4 +1,4 @@
-# MSP430
+# elf factory
 
 This repo holds a bunch of code for the TI MSP430FR5994 microcontroller. This is my learning process.
 
@@ -19,6 +19,8 @@ Compile all `.c` files (must be in the `src` directory):
 make
 ```
 Running `make` will compile all `.c` files into an equivalent `.elf` file and place them all in a directory named `elves`...🧝 pun intended.
+
+**NOTE**: the `msp430fr5994.h` header file that the compiler provides will need to be fixed. On line 66 change `#include <iomacros.h>` to `"iomacros.h"`. The compiler is unable to find the file without the quotes.
 
 **Flashing**:
 ```
