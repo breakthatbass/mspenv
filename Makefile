@@ -5,8 +5,6 @@ endif
 
 # paths
 INC_DIR = $(MSPGCCDIR)/include
-# mspdebug needs the path for the driver
-TILIB_PATH=$(MSPGCCDIR)/bin/
 
 DEVICE=msp430fr5994
 
@@ -20,8 +18,6 @@ BINS=$(patsubst src/%.c, $(ELFDIR)/%.elf, $(SRCS))
 # place the .elf files in the elves dir
 ELFDIR=elves
 ELVES=$(addprefix $(ELFDIR)/,$(notdir  $(SRCS:.c=.elf)))
-
-
 
 CLFAGS = -I . -I $(INC_DIR) -mmcu=$(DEVICE) -g -02
 LFLAGS = -L . -L $(INC_DIR) -T $(DEVICE).ld
@@ -40,7 +36,6 @@ $(ELFDIR):
 # upload to baord
 # USAGE: make install a=binary
 install:
-	export MSPDEBUG_TILIB_PATH=$(TILIB_PATH)
 	mspdebug $(DRIVER) "prog $(ELFDIR)/$(a).elf" --allow-fw-update
 
 clean:
