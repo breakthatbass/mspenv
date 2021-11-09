@@ -3,7 +3,7 @@
 ; from page 72
 ;--------------------------------------------------------------------
 
-#include "../../../ti/msp430-gcc/include/msp430fr5994.h"
+GET "../../../ti/msp430-gcc/include/msp430fr5994.h"
 
 	ORG		0xf000							; start of 4KB flash memory
 Reset:

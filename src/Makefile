@@ -3,7 +3,7 @@ ifndef $(MSPGCCDIR)
 	MSPGCCDIR=$(HOME)/ti/msp430-gcc
 endif
 
-PROG=ledson.elf
+PROG=butled1.elf
 
 # paths
 INC_DIR = $(MSPGCCDIR)/include
@@ -26,11 +26,13 @@ all: $(PROG)
 %.elf: %.c
 	$(CC) $(CFLAGS) $(LFLAGS) $< -o $@
 
-# ./mspdebug $(DRIVER) --force-reset "prog blink.elf" --allow-fw-update
+#asm:
+#	$(CC) $(CFLAGS) -D_GNU_ASSEMBLER_  ledsasm.S -o ledsasm.elf
+
 # upload
 install:
 	export MSPDEBUG_TILIB_PATH=$(TILIB_PATH)
-	mspdebug $(DRIVER) --force-reset "prog $(PROG)" --allow-fw-update
+	mspdebug $(DRIVER) "prog $(PROG)" --allow-fw-update
 
 clean:
 	rm -f *.o *.elf
