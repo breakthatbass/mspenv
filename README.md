@@ -24,7 +24,7 @@ Running `make` will compile all `.c` files into an equivalent `.elf` file and pl
 ```
 make install a=<prog_name>
 ```
-If you want to upload a program called `blink.elf`, you would use `make install blink`. It will look in the `elves` directory for it.
+If you want to upload a program called `blink.elf`, you would use `make install a=blink`. It will look in the `elves` directory for it.
 
 **NOTE**: In order to flash it to the board, `MSPDEBUG_TILIB_PATH` needs to be defined as an environment variable in the shell beforehand.
 
