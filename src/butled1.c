@@ -7,7 +7,8 @@
  * Taylor Gamache 2021-11-09
  * */
 
-#include "../../../ti/msp430-gcc/include/msp430fr5994.h"
+//#include "../../../ti/msp430-gcc/include/msp430fr5994.h"
+#include <msp430fr5994.h>
 
 // pins for LED and button on port 2
 #define LED1	BIT3
