@@ -25,3 +25,11 @@ Running `make` will compile all `.c` files into an equivalent `.elf` file and pl
 make install a=<prog_name>
 ```
 If you want to upload a program called `blink.elf`, you would use `make install blink`. It will look in the `elves` directory for it.
+
+**NOTE**: In order to flash it to the board, `MSPDEBUG_TILIB_PATH` needs to be defined as an environment variable in the shell beforehand.
+
+Run this command priot to installing:
+```
+export MSPDEBUG_TILIB_PATH=$HOME/ti/msp430-gcc/bin/
+```
+Or add it to your `.zshrc` or `bash_profile` or whatver you use.
