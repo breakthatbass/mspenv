@@ -27,3 +27,8 @@ Running `make` will compile all `.c` files into an equivalent `.elf` file and pl
 make install a=<prog_name>
 ```
 If you want to upload a program called `blink.elf`, you would use `make install a=blink`. It will look in the `elves` directory for it.
+
+**Compiler info**:
+```
+make help
+```
