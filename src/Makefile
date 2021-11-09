@@ -3,6 +3,8 @@ ifndef $(MSPGCCDIR)
 	MSPGCCDIR=$(HOME)/ti/msp430-gcc
 endif
 
+PROG=ledson.elf
+
 # paths
 INC_DIR = $(MSPGCCDIR)/include
 # mspdebug needs the path for the driver
@@ -19,7 +21,7 @@ LFLAGS = -L . -L $(INC_DIR) -T $(DEVICE).ld
 # mspdebug driver
 DRIVER:=tilib
 
-all: ledson.elf
+all: $(PROG)
 
 %.elf: %.c
 	$(CC) $(CFLAGS) $(LFLAGS) $< -o $@
@@ -28,7 +30,7 @@ all: ledson.elf
 # upload
 install:
 	export MSPDEBUG_TILIB_PATH=$(TILIB_PATH)
-	mspdebug $(DRIVER) --force-reset "prog blink.elf" --allow-fw-update
+	mspdebug $(DRIVER) --force-reset "prog $(PROG)" --allow-fw-update
 
 clean:
 	rm -f *.o *.elf
