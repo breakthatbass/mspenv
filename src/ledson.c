@@ -1,4 +1,10 @@
-#include "../../ti/msp430-gcc/include/msp430fr5994.h"
+/**
+ * ledson.c - a simple program to light LEDs
+ * Sets pins to output, lights pattern of LEDs, then loops forever
+ * from page 71
+ * */
+
+#include "../../../ti/msp430-gcc/include/msp430fr5994.h"
 
 void main(void)
 {

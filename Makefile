@@ -21,7 +21,7 @@ DRIVER:=tilib
 
 all: blink.elf
 
-%.elf: %.c
+%.elf: src/%.c
 	$(CC) $(CFLAGS) $(LFLAGS) $< -o $@
 
 # ./mspdebug $(DRIVER) --force-reset "prog blink.elf" --allow-fw-update
