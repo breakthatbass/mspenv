@@ -1,8 +1,5 @@
 /**
- * buttons.c - a simple program to make use of the two buttons
- *
- * left button turns on the left LED
- * right button turns on the right LED
+ * blink_both_LEDS.c - blink both LEDs
  *
  * Taylor Gamache, 2021-11-09
  * */
