@@ -29,6 +29,15 @@ void main(void)
 	// like the above, this could have been done as
 	// P1OUT |= 0x3; --> 0b00000011
 
+	/***
+	 * NOTE: the bits are set above one by one
+	 * but they can be done at the same time.
+	 *
+	 * P1DIR |= 0x3;
+	 * P1OUT |= 0x3;
+	 *
+	 * */
+	
 	while (1) {
 		// do nothing forever
 	}
