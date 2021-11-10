@@ -1,6 +1,10 @@
-# elf factory
+<img src="elf.gif" height="170" alt="elf factory - a bunch of code for the msp430">  
 
-🧝 A bunch of code for the msp430 microcontroller. Yes, it all compiles to `.elf` files.
+#
+
+**elf factory** is a bunch of small programs for the msp430 microcontroller to explore the board and use as templates. Yes, it all compiles to `.elf` files.
+
+#
 
 All the code here can be compiled and flashed by using the `Makefile` in the root directory.
 
