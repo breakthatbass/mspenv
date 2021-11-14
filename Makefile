@@ -27,11 +27,14 @@ DRIVER:=tilib
 
 all: $(ELFDIR)/$(BINS)
 
+
+
 $(ELFDIR)/%.elf: src/%.c | $(ELFDIR)
-	$(CC) $(CFLAGS) $(LFLAGS) $< -o $@
+	$(CC) $(CFLAGS) $(LFLAGS) lib/uartio.c $< -o $@
 
 $(ELFDIR):
 	mkdir -p $(ELFDIR)
+
 
 # show compiler help menu
 help:
