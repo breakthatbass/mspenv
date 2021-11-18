@@ -12,6 +12,7 @@ CC=$(MSPGCCDIR)/bin/msp430-elf-gcc
 
 # get all .c files
 SRCS=$(wildcard src/*.c)
+LIBS=$(wildcard lib/*.c)
 
 BINS=$(patsubst src/%.c, $(ELFDIR)/%.elf, $(SRCS))
 
@@ -27,10 +28,8 @@ DRIVER:=tilib
 
 all: $(ELFDIR)/$(BINS)
 
-
-
 $(ELFDIR)/%.elf: src/%.c | $(ELFDIR)
-	$(CC) $(CFLAGS) $(LFLAGS) lib/uartio.c $< -o $@
+	$(CC) $(CFLAGS) $(LFLAGS) $(LIBS) $< -o $@
 
 $(ELFDIR):
 	mkdir -p $(ELFDIR)
