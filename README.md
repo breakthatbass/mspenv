@@ -2,7 +2,7 @@
 
 #
 
-**elf factory** is a bunch of small programs for the msp430 microcontroller to explore the board and use as templates. Yes, it all compiles to `.elf` files.
+**elves** is a bunch of small programs for the msp430 microcontroller to explore the board and use as templates that all compile to `.elf` files.
 
 #
 
@@ -13,7 +13,7 @@ To do anything in this repo there is some setup. We'll need a compiler, header f
 
 - Compiler, toolchain, headers: [msp430-gcc](https://www.ti.com/tool/MSP430-GCC-OPENSOURCE)
 - Flasher: [mspdebug](https://github.com/dlbeer/mspdebug)
-- `mspdebug` looks to an environment variable for a filepath for the `tilib` library. That can be set by runnig the command `export MSPDEBUG_TILIB_PATH=$HOME/ti/msp430-gcc/bin/`. But it's just easier to add it to your `.bash_profile` or `.zshrc` or whatever you use.
+- `mspdebug` looks to an environment variable for a filepath for the `tilib` library. That can be set by runnig the command `export MSPDEBUG_TILIB_PATH=$HOME/ti/msp430-gcc/bin/` before using it. But it's just easier to add it to your `.bash_profile` or `.zshrc` or whatever you use.
 
 
 ## Usage
@@ -24,7 +24,7 @@ Compile all `.c` files (must be in the `src` directory):
 ```
 make
 ```
-Running `make` will compile all `.c` files into an equivalent `.elf` file and place them all in a directory named `elves`...🧝 pun intended.
+Running `make` will compile all `.c` files into an equivalent `.elf` file and place them all in a directory named `elves`...🧝.
 
 **Flashing**:
 ```
