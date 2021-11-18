@@ -2,7 +2,7 @@
 
 #
 
-**elves** is a bunch of small programs for the msp430 microcontroller to explore the board and use as templates that all compile to `.elf` files.
+**elves** is a text editor development environment and bunch of small programs for the msp430 microcontroller. The goal here is to learn.
 
 There's also a work in progress library for printing to uart and reading from uart.
 #
