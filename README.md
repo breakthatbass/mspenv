@@ -4,6 +4,7 @@
 
 **elves** is a bunch of small programs for the msp430 microcontroller to explore the board and use as templates that all compile to `.elf` files.
 
+There's also a work in progress library for printing to uart and reading from uart.
 #
 
 All the code here can be compiled and flashed by using the `Makefile` in the root directory.
