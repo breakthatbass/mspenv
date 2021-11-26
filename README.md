@@ -1,12 +1,8 @@
-<img src="elf.gif" height="170" alt="elf factory - a bunch of code for the msp430">  
+# msp430-env
+
+A text editor development environment, bunch of small standalone programs, and a home UART library for the msp430fr5994 microcontroller. The goal here is to learn more about writing firmware for embedded systems.
 
 #
-
-**elves** is a text editor development environment and bunch of small programs for the msp430 microcontroller. The goal here is to learn.
-
-There's also a work in progress library for printing to uart and reading from uart.
-#
-
 All the code here can be compiled and flashed by using the `Makefile` in the root directory.
 
 ## Setting up the development environment
@@ -16,6 +12,12 @@ To do anything in this repo there is some setup. We'll need a compiler, header f
 - Flasher: [mspdebug](https://github.com/dlbeer/mspdebug)
 - `mspdebug` looks to an environment variable for a filepath for the `tilib` library. That can be set by runnig the command `export MSPDEBUG_TILIB_PATH=$HOME/ti/msp430-gcc/bin/` before using it. But it's just easier to add it to your `.bash_profile` or `.zshrc` or whatever you use.
 
+Something like this would work:
+```
+echo export MSPDEBUG_TILIB_PATH=$HOME/ti/msp430-gcc/bin/ >> $HOME/.zshrc
+```
+
+**Note:** the `Makefile` expects the `msp430-gcc` directory to be in the `$HOME` directory.
 
 ## Usage
 
