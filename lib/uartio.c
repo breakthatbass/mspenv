@@ -143,13 +143,21 @@ void sendByte(unsigned char byte)
 ******************************************************************/
 
 
-static unsigned char recvbyte(void)
+static char recvbyte(void)
 {
-    unsigned char c;
-    while(!(UCA1IFG&UCTXIFG));
+    char c;
+    while(!(UCA1IFG&UCRXIFG));
     while(!UCA1RXBUF);
     c = UCA1RXBUF;
     return c;
+}
+
+int _getchar(void)
+{
+	int c;
+	c = -1;
+		c = recvbyte();
+	return c;	
 }
 
 

@@ -11,15 +11,32 @@ void main(void) {
   UART_init();
   
   char buf[100];
+  int c;
+  int i = 0;
 
+  
   while (1) {
         uartprintf("> ");
-        _gets(buf, 100);
-        uartprintf("%s\r\n", buf);
+		while ((c = _getchar())) {
+			
+			if (c == -1) continue;
+
+			uartprintf("%c", (char)c);
+			buf[i++] = c;
+			if (c == '\n') {
+				uartprintf("\n\n");
+				break;
+			}
+		}
+		buf[i] = '\0';
+		uartprintf("%s\n", buf);
         
 		__delay_cycles(500000L);
 	}
 }
+
+
+
 
 void UART_init(void){
     P2SEL1 |= BIT5 + BIT6;              //Activate Pin for UART use

@@ -6,5 +6,6 @@ void _puts(char *s);
 void _putc(unsigned b);
 void sendByte(unsigned char byte);
 unsigned char *_gets(unsigned char *s, unsigned int len);
+int _getchar(void);
 
 #endif

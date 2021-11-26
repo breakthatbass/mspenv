@@ -16,9 +16,12 @@ LIBS=$(wildcard lib/*.c)
 
 BINS=$(patsubst src/%.c, $(ELFDIR)/%.elf, $(SRCS))
 
+# assembly stuff
+ASM_SRCS=$(wildcard src/*.s)
+ASM_BINS=$(patsubst src/*.s, $(ELFDIR)/%.elf, $(ASM_SRCS))
+
 # place the .elf files in the elves dir
 ELFDIR=elves
-ELVES=$(addprefix $(ELFDIR)/,$(notdir  $(SRCS:.c=.elf)))
 
 CFLAGS = -I . -I $(INC_DIR) -mmcu=$(DEVICE) -g
 LFLAGS = -L . -L $(INC_DIR) -T $(DEVICE).ld
@@ -26,10 +29,13 @@ LFLAGS = -L . -L $(INC_DIR) -T $(DEVICE).ld
 # mspdebug driver
 DRIVER:=tilib
 
+#------------------------------------------------#
+
 all: $(ELFDIR)/$(BINS)
 
 $(ELFDIR)/%.elf: src/%.c | $(ELFDIR)
 	$(CC) $(CFLAGS) $(LFLAGS) $(LIBS) $< -o $@
+
 
 $(ELFDIR):
 	mkdir -p $(ELFDIR)

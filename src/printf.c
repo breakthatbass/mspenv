@@ -19,32 +19,22 @@
 void UART_init(void);
 
 void main(void) {
-  WDTCTL = WDTPW | WDTHOLD;   //Stop watchdog timer
-  PM5CTL0 &= ~LOCKLPM5;
+	WDTCTL = WDTPW | WDTHOLD;   //Stop watchdog timer
+	PM5CTL0 &= ~LOCKLPM5;
 
 
-  //Select ACLK to use VLO clock source
-  /*
-    CSCTL0_H = CSKEY_H;
-    CSCTL2 |= SELA__VLOCLK;
-    CSCTL0_H = 0;
-  
-	//Setup the timer
-    TA0CCTL0 = CCIE;
-    TA0CCR0 = COUNTER_VALUE;
-    TA0CTL  = TASSEL__ACLK + MC__UP + ID__8; //ACLK, Up Mode, Prescaler = 8
-    TA0CTL |= TAIE;
-	*/
 	UART_init();
-	unsigned char *p = "poo radley";
-	unsigned int r = 6;
+	unsigned char *s = "Hello, my name is Taylor";
+	unsigned int r = 34;
 
-  while (1) {
-		uartprintf("Hello my name is %s and I have %u trees\r\n", p, r);
+	while (1) {
+		uartprintf("%s and I am %u years old\r\n", s, r++);
 		
 		__delay_cycles(500000L);
 	}
 }
+
+
 
 void UART_init(void){
     P2SEL1 |= BIT5 + BIT6;              //Activate Pin for UART use
