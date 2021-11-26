@@ -7,5 +7,6 @@ void _putc(unsigned b);
 void sendByte(unsigned char byte);
 unsigned char *_gets(unsigned char *s, unsigned int len);
 int _getchar(void);
+void UART_init(void)
 
 #endif
