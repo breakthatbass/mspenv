@@ -177,7 +177,7 @@ unsigned char *_gets(unsigned char *s, unsigned int len)
 
 
 
-void UART_init(void){
+void uart_init(void){
     P2SEL1 |= BIT5 + BIT6;              //Activate Pin for UART use
     P2SEL0 &= ~BIT5 + ~BIT6;            //Activate Pin for UART use
 
