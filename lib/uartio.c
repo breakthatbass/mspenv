@@ -29,8 +29,8 @@ static const unsigned long dv[] = {
 		1000, // +6
 		100, // +7
 		10, // +8
-		1, // +9
-		};
+		1 // +9
+};
 
 
 static void xtoa(unsigned long x, const unsigned long *dp) {
@@ -177,7 +177,8 @@ unsigned char *_gets(unsigned char *s, unsigned int len)
 
 
 
-void uart_init(void){
+void uart_init(void)
+{
     P2SEL1 |= BIT5 + BIT6;              //Activate Pin for UART use
     P2SEL0 &= ~BIT5 + ~BIT6;            //Activate Pin for UART use
 
