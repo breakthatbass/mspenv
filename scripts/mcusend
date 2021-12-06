@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import serial
+from argparse import ArgumentParser
+
+a = ArgumentParser(description='send files to a microcontroller')
+a.add_argument('file',
+                help='file to send to mcu')
+a.add_argument('--baude', '-b',
+                help='provide a baude rate to override default')
+a.add_argument('--usb', '-u',
+                help='provide a usb file to override default')
+
+res = a.parse_args()
+
+# defaults
+# usb will almost definitely need to be overwritten on your PC
+usb = '/dev/cu.usbserial-AR0JW545'
+baude = '9600'
+
+if res.usb:
+    usb = res.usb
+if res.baude:
+    baude = res.usb
+
+port_cmd = f'screen {usb} {baude}'
+
+# make sure file exists
+if not os.path.exists(res.file):
+    print(f'error: {res.file} not found')
+    sys.exit(1)
+
+# attempt to connect and send
+try:
+    s = serial.Serial(usb)
+    s.write(open(res.file, 'rb').read())
+    s.write('\r'.encode()) # done signal
+    os.system(port_cmd)
+except OSError:
+    print('error: usb resource not found or is busy')
+    print('try unplugging and plugging back in')
+    sys.exit(1)

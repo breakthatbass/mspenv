@@ -1,0 +1,80 @@
+#!/usr/bin/env python3
+
+'''
+add and convert decimal, hexadecimal, and binary numbers
+
+usage: conv [n1 n2 n3 ...]
+'''
+import sys
+
+class Conv:
+    '''convert and/or add numbers of any base'''
+    def __init__(self, ints):
+        self.ints = ints
+
+    def add(self):
+        '''takes a list and add all numbers in list together'''
+        if len(self.ints) == 1:
+            return self.ints[0]
+        else:
+            sum = 0
+            for n in self.ints:
+                try:
+                    sum += int(n, 0)
+                except ValueError as ve:
+                    continue
+            return str(sum)
+
+    def convert(self, num):
+        '''convert a number to hex, bin, and dec'''
+        try:
+            dec = int(num, 0)
+            binary = bin(dec)
+            hexidec = hex(dec)
+        except ValueError as ve:
+            return None
+        return dec, hexidec, binary
+
+
+def bitlen(b):
+    '''get the number of bits in a binary string'''
+    s = b.lstrip('0b')
+    return len(s)
+
+
+def make_hex_upper(h):
+    '''make the letters in the hex number all uppercase'''
+    s = h.lstrip('0x')
+    return f'0x{s.upper()}'
+
+
+def handle_args(args):
+    '''remove file name from args. if no args, assume 0'''
+    if len(args) > 1:
+        args.pop(0) # remove file name from args
+        if args[0] == '-h' or args[0] == '--help':
+            print('usage: conv [n1 n2 n3 ...]')
+            sys.exit(0)
+    else:
+        print('usage: conv [n1 n2 n3 ...]')
+        sys.exit(1)
+    return args
+
+
+def main():
+    ints = handle_args(sys.argv)
+    c = Conv(ints)
+    t = c.add()
+    totals = c.convert(t)
+
+    if totals is not None:
+        bits = bitlen(totals[2])
+
+        print(f'dec: {totals[0]}')
+        print(f'hex: {make_hex_upper(totals[1])}')
+        print(f'bin: {totals[2]}', end='\t')
+        print(f'(bits: {bits})')
+
+
+if __name__ == '__main__':
+    main()
