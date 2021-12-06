@@ -15,14 +15,13 @@
 
 #define COUNTER_VALUE 1250
 
-void UART_init(void);
 
 void main(void) {
 	WDTCTL = WDTPW | WDTHOLD;   //Stop watchdog timer
 	PM5CTL0 &= ~LOCKLPM5;
 
 
-	UART_init();
+	uart_init();
 	unsigned char *s = "Hello, my name is Taylor";
 	unsigned int r = 34;
 
