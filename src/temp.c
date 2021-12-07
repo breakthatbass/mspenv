@@ -1,27 +1,23 @@
-/**
- * blink.c - a simple program to blink the left LED with about a 1 sec delay
- *
- * Taylor Gamache, 2021-11-10
- * */
 #include <msp430.h>
-#include "../lib/uartio.h"
 
-void temp_init(void)
-{
-	ADC12CTL0=CEF_1 + REFON + ADC12ON + ADC12SHT0_3 ; //1.5V ref,Ref on,64 clocks for sample
-	ADC12CTL1=ADC12RES_1 + ADC12DIV_3; //temp sensor is at 10 and clock/4
-}
+#define COUNTER_VALUE 1250
+#define BUF 50
 
-int tempOut()
+volatile int timestamps[BUF];
+volatile unsigned int i = 0;
+
+void clock_init(void)
 {
-	int t=0;
-	__delay_cycles(1000);              //wait 4 ref to settle
-	ADC12CTL0 |= ADC12ENC + ADC12SC;      //enable conversion and start conversion
-	while(ADC12CTL1);         //wait..i am converting..pum..pum..
-	uartprintf("here\n\r");
-	t=ADC12MEM9;                       //store val in t
-	ADC12CTL0&=~ADC12ENC;                     //disable adc conv
-	return(int) ((t * 27069L - 18169625L) >> 16); //convert and pass
+	// set up clock
+    CSCTL0_H = CSKEY_H;
+	CSCTL2 |= SELA__VLOCLK;
+	CSCTL0_H = 0;
+	
+	// set up timer
+    TA0CCR0 = COUNTER_VALUE;
+    TA0CTL  = TASSEL__ACLK + MC__UP + ID__8;;
+	TA0CCTL0 = CAP | CCIE;
+    TA0CTL |= TAIE;
 }
 
 void main(void)
@@ -30,19 +26,28 @@ void main(void)
 	WDTCTL = WDTPW | WDTHOLD;
 	// unlock ports
 	PM5CTL0 &= ~LOCKLPM5;
-	uart_init();
+	
+	// set LEDs as output + start with them off
+	P1DIR |= 0x3;
+	P1OUT &= ~0x3;
 
-	temp_init();
+	clock_init();
 
-	volatile int temp = 0;
-
-	uartprintf("starting up\n\r");
+	_enable_interrupts();
 
 	while(1) {
-		__delay_cycles(500);
-		temp = tempOut();
-		__delay_cycles(500);
-		uartprintf("temp: %d\n", temp);
+		_BIS_SR(LPM3_bits + GIE);
+		// light up right LED if timer info is recorded
+		if (timestamps[0]) P1OUT |= BIT1;
+		else P1OUT &= ~BIT1;
 	}
 }
 
+void __attribute__ ((interrupt(TIMER0_A0_VECTOR))) Timer_A(void)
+{
+	// light up left LED if in interrupt
+	P1OUT |= BIT0;
+	// whenever interrupt if triggered, copy timestamp to timestamp[i]
+	timestamps[i++] = TA0CCR0;
+	TA0CTL |= TACLR;
+}
