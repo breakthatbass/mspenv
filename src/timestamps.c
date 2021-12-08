@@ -8,6 +8,8 @@
  * 
  * I made the code a bit more modular, changed of the variable names, 
  * and made it print out the time stamps when it's done.
+ * 
+ * source: https://dev.ti.com/tirex/explore/node?devices=MSP430FR5994&node=ALowf6b16LJ.MtAJRKq.Bg__IOGqZri__LATEST
  * */
 #include <msp430fr5994.h>
 #include "../lib/uartio.h"
@@ -66,7 +68,18 @@ int main(void)
 
 void __attribute__ ((interrupt(TIMER0_A1_VECTOR))) Timer0_A1_ISR (void)
 {
+    /**
+     * the following line: `switch (__even_in_range(TA0IV, TAIV__TAIFG))'
+     * is the same as writing `switch(TA0IV)'
+     * but allows the compiler to generate more efficient code.
+     * 
+     * it probably doesn't always matter but in this case of grabbing
+     * timestamps, it's necessary.
+     * 
+     * without it, either incorrect timestamps or no timestamps are recorded.
+     * */
     switch (__even_in_range(TA0IV, TAIV__TAIFG)) {
+    // switch(TA0IV) {
         case TAIV__TACCR1:
             break;
         case TAIV__TACCR2:
