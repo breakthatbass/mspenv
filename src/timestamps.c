@@ -1,3 +1,14 @@
+/**
+ * timestamps.c
+ * 
+ * a simple program to record timestamps from CPU clock into an array
+ * adding at interrupts. when the array is full, blink the led forever.
+ * 
+ * this is adapted from one of the example programs from the TI website.
+ * 
+ * I made the code a bit more modular, changed of the variable names, 
+ * and made it print out the time stamps when it's done.
+ * */
 #include <msp430fr5994.h>
 #include "../lib/uartio.h"
 
