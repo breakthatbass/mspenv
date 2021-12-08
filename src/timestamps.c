@@ -78,8 +78,8 @@ void __attribute__ ((interrupt(TIMER0_A1_VECTOR))) Timer0_A1_ISR (void)
      * 
      * without it, either incorrect timestamps or no timestamps are recorded.
      * */
-    switch (__even_in_range(TA0IV, TAIV__TAIFG)) {
-    // switch(TA0IV) {
+    //switch (__even_in_range(TA0IV, TAIV__TAIFG)) {
+    switch(TA0IV) {
         case TAIV__TACCR1:
             break;
         case TAIV__TACCR2:
