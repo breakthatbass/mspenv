@@ -1,6 +1,11 @@
+
+
+
+
+
 # msp430-env
 
-A text editor development environment, bunch of small standalone programs, and a home UART library for the msp430fr5994 microcontroller. The goal here is to learn more about writing firmware for embedded systems.
+A text editor development environment, bunch of small standalone programs, and a UART library for the `msp430fr5994` microcontroller. The goal here is to learn more about writing firmware for embedded systems and then having a reference.
 
 #
 All the code here can be compiled and flashed by using the `Makefile` in the root directory.
