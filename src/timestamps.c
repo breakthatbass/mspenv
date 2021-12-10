@@ -1,3 +1,9 @@
+/**
+ * timestamps.c
+ * 
+ * a simple program to record timestamps from CPU clock into an array
+ * at interrupts. after 20 timestamps, print them out, then do nothing.
+ * */
 #include <msp430fr5994.h>
 #include "../lib/uartio.h"
 
