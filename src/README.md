@@ -9,5 +9,5 @@
 - [`breadboardled.c`](https://github.com/breakthatbass/msp430-env/blob/main/src/breadboardled.c) - blink an LED on a breadboard.
 - [`breadswitch.c`](https://github.com/breakthatbass/msp430-env/blob/main/src/breadswitch.c) - blink an LED on a breadboard by pressing a switch.
 - [`printf.c`](https://github.com/breakthatbass/msp430-env/blob/main/src/printf.c) - a simple program to test out the `uartprintf()` function.
-- [`sendchar.c`](https://github.com/breakthatbass/msp430-env/blob/main/src/sendchar.c) - take input through UART and print it out.
+- [`getchar.c`](https://github.com/breakthatbass/msp430-env/blob/main/src/getchar.c) - take input through UART and print it out.
 - [`timestamps.c`](https://github.com/breakthatbass/msp430-env/blob/main/src/timestamps.c) - record timestamps from CPU clock at interrupts and record into an array.
