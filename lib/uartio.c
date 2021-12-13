@@ -16,6 +16,8 @@
 
 void _putc(unsigned);
 void _puts(char *);
+void sendByte(unsigned char byte);
+char recvbyte(void);
 
 static const unsigned long dv[] = {
 //  4294967296      // 32 bit unsigned max
@@ -57,7 +59,13 @@ static void puth(unsigned n) {
 	_putc(hex[n & 15]);
 }
 
-
+/**
+ * uartprintf
+ *
+ * @desc: printf but for the msp430 MCU to print to UART. Requires uart_init()`.
+ * 
+ * @todo: make int capability. for now, it requires unsigned.
+ * */
 void uartprintf(char *format, ...)
 {
 	char c;
@@ -104,31 +112,32 @@ void uartprintf(char *format, ...)
 }
 
 /**
- * puts() is used by printf() to display or send a string.. This function
- *     determines where printf prints to. For this case it sends a string
- *     out over UART, another option could be to display the string on an
- *     LCD display.
- **/
+ * _puts
+ *
+ * @desc: print a string through UART
+ *
+ * @param: `s` - print each `char` in `s` to an open UART console.
+ * */
 void _puts(char *s) {
 	char c;
 
-	// Loops through each character in string 's'
 	while (c = *s++) {
 		sendByte(c);
 	}
 }
 /**
- * puts() is used by printf() to display or send a character. This function
- *     determines where printf prints to. For this case it sends a character
- *     out over UART.
- **/
+ * _putc
+ *
+ * @desc: send a `char` to an open UART console.
+ *
+ * @param: `b` - the `char` to print.
+ * */
 void _putc(unsigned b) {
 	sendByte(b);
 }
 
-/**
- * Sends a single byte out through UART
- **/
+
+// aends a single byte out through UART
 void sendByte(unsigned char byte)
 {
 	// USCI_A0 TX buffer ready?
@@ -137,13 +146,8 @@ void sendByte(unsigned char byte)
 }
 
 
-/*****************************************************************
-*
-*   gets() fucntion --> buggy 
-******************************************************************/
 
-
-static char recvbyte(void)
+char recvbyte(void)
 {
     char c;
     while(!(UCA1IFG&UCRXIFG));
@@ -152,6 +156,14 @@ static char recvbyte(void)
     return c;
 }
 
+
+/**
+ * _getchar
+ *
+ * @desc: attempt to recheive a `char` from an open UART console.
+ *
+ * @return: the `char` recieved, else `-1`.
+ * */
 int _getchar(void)
 {
 	int c;
@@ -160,7 +172,11 @@ int _getchar(void)
 	return c;	
 }
 
-
+/**
+ * gets
+ *
+ * buggy
+ * */
 unsigned char *_gets(unsigned char *s, unsigned int len)
 {
     unsigned int i = 0;
@@ -174,9 +190,26 @@ unsigned char *_gets(unsigned char *s, unsigned int len)
     return s;
 }
 
+unsigned char *uartgets(char *s, unsigned int len)
+{
+	unsigned int i = 0;
+	unsigned char c;
 
+	while ((c = _getchar())) {
+		if (c == -1) continue;
 
+		s[i++] = c;
+		if (c == '\r') break;
+	}
+	s[i] = '\0';
+	return s;
+}
 
+/**
+ * uart_init
+ *
+ * @desc: quickly set up a UART connection on port 2 pins 5 and 6.
+ **/
 void uart_init(void)
 {
     P2SEL1 |= BIT5 + BIT6;              //Activate Pin for UART use

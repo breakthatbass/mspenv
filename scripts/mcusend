@@ -3,6 +3,7 @@
 import os
 import sys
 import serial
+import time
 from argparse import ArgumentParser
 
 a = ArgumentParser(description='send files to a microcontroller')
@@ -37,6 +38,7 @@ try:
     s = serial.Serial(usb)
     s.write(open(res.file, 'rb').read())
     s.write('\r'.encode()) # done signal
+    time.sleep(1)
     os.system(port_cmd)
 except OSError:
     print('error: usb resource not found or is busy')
