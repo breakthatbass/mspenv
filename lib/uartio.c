@@ -10,14 +10,30 @@
  * https://gist.github.com/nicholasjconn/2896369#file-printf-c
  * */
 
+/******************************************************************************
+*
+*   Author: Taylor Gamache
+*   Email: gamache.taylor@gmail.com
+*   
+*   about 60% or so of this code comes from:
+*	https://gist.github.com/nicholasjconn/2896369#file-printf-c
+*
+*   @name: uartio
+*   @description: a handful of basic functions to read and write to UART for the msp430 MCU.
+*
+******************************************************************************/
+
 #include <msp430.h>
 #include "stdarg.h"
 #include "uartio.h"
+#include "stddef.h"  // for NULL
+
 
 void _putc(unsigned);
 void _puts(char *);
 void sendByte(unsigned char byte);
 char recvbyte(void);
+
 
 static const unsigned long dv[] = {
 //  4294967296      // 32 bit unsigned max
@@ -35,6 +51,7 @@ static const unsigned long dv[] = {
 };
 
 
+// convert hex to int
 static void xtoa(unsigned long x, const unsigned long *dp) {
 	char c;
 	unsigned long d;
@@ -46,18 +63,25 @@ static void xtoa(unsigned long x, const unsigned long *dp) {
 			c = '0';
 			while (x >= d)
 				++c, x -= d;
-			_putc(c);
+			uartputc(c);
 		} while (!(d & 1));
 	} else
-		_putc('0');
+		uartputc('0');
 }
 
 
+// print a hex char
 static void puth(unsigned n) {
 	static const char hex[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
 			'9', 'A', 'B', 'C', 'D', 'E', 'F' };
-	_putc(hex[n & 15]);
+	uartputc(hex[n & 15]);
 }
+
+/****
+ *
+ * uartio API
+ *
+ ****/
 
 /**
  * uartprintf
@@ -78,21 +102,27 @@ void uartprintf(char *format, ...)
 		if(c == '%') {
 			switch(c = *format++) {
 				case 's': // String
-					_puts(va_arg(a, char*));
+					uartputs(va_arg(a, char*));
 					break;
 				case 'c':// Char
-					_putc(va_arg(a, int));
+					uartputc(va_arg(a, int));
 				break;
 				case 'i':// 16 bit Integer
 				case 'u':// 16 bit Unsigned
 					i = va_arg(a, int);
-					if(c == 'i' && i < 0) i = -i, _putc('-');
+					if (c == 'i' && i < 0) {
+						i = -i;
+						uartputc('-');
+					}
 					xtoa((unsigned)i, dv + 5);
 				break;
 				case 'l':// 32 bit Long
 				case 'n':// 32 bit uNsigned loNg
 					n = va_arg(a, long);
-					if(c == 'l' && n < 0) n = -n, _putc('-');
+					if (c == 'l' && n < 0) {
+						n = -n; 
+						uartputc('-');
+					}
 					xtoa((unsigned long)n, dv);
 				break;
 				case 'x':// 16 bit heXadecimal
@@ -106,51 +136,55 @@ void uartprintf(char *format, ...)
 				default: goto bad_fmt;
 			}
 		} else
-			bad_fmt: _putc(c);
+			bad_fmt: uartputc(c);
 	}
 	va_end(a);
 }
 
+
 /**
- * _puts
+ * uartputs
  *
  * @desc: print a string through UART
  *
  * @param: `s` - print each `char` in `s` to an open UART console.
  * */
-void _puts(char *s) {
+void uartputs(char *s) {
 	char c;
 
 	while (c = *s++) {
-		sendByte(c);
+		uartputc(c);
 	}
 }
+
+
 /**
- * _putc
+ * uartputc
  *
- * @desc: send a `char` to an open UART console.
+ * @desc: Send a single byte to the transmit buffer register.
  *
- * @param: `b` - the `char` to print.
+ * @param: `byte` - byte to send to transmit buffer register.
  * */
-void _putc(unsigned b) {
-	sendByte(b);
-}
-
-
-// aends a single byte out through UART
-void sendByte(unsigned char byte)
+void uartputc(unsigned char byte)
 {
 	// USCI_A0 TX buffer ready?
-    while(!(UCA1IFG&UCTXIFG));
-	UCA1TXBUF = byte;			// TX -> RXed character
+    while(!(UCA1IFG & UCTXIFG));
+	// write bite into transmit buffer register
+	UCA1TXBUF = byte;
 }
 
 
-
-char recvbyte(void)
+/**
+ * uartgetc
+ *
+ * @desc: attempt to read a byte stored in the recieve buffer register.
+ *
+ * @return: if a byte is found, return byte, else return `-1`.
+ * */
+int uartgetc(void)
 {
-    char c;
-    while(!(UCA1IFG&UCRXIFG));
+    int c = -1;
+    while(!(UCA1IFG & UCRXIFG));
     while(!UCA1RXBUF);
     c = UCA1RXBUF;
     return c;
@@ -158,52 +192,28 @@ char recvbyte(void)
 
 
 /**
- * _getchar
+ * uartgets
  *
- * @desc: attempt to recheive a `char` from an open UART console.
+ * @desc: read an entire line/string into `buf`.
  *
- * @return: the `char` recieved, else `-1`.
+ * @param: `buf` - the buffer to read the bytes into.
+ * @param: `limit` - the limit of bytes to read into `buf`.
+ *
+ * @return: `buf` with the bytes stored in its memory space.
  * */
-int _getchar(void)
+char *uartgets(char *buf, int limit)
 {
-	int c;
-	c = -1;
-		c = recvbyte();
-	return c;	
-}
-
-/**
- * gets
- *
- * buggy
- * */
-unsigned char *_gets(unsigned char *s, unsigned int len)
-{
-    unsigned int i = 0;
-    unsigned char c;
-    while ((c = recvbyte()) && i < len) {
-        *s = c;
-        s++;
-        i++;
-    }
-    *s = '\0';
-    return s;
-}
-
-unsigned char *uartgets(char *s, unsigned int len)
-{
-	unsigned int i = 0;
-	unsigned char c;
-
-	while ((c = _getchar())) {
-		if (c == -1) continue;
-
-		s[i++] = c;
+	int c, i;
+	i = 0;
+	while ((c = uartgetc()) && --limit) {
 		if (c == '\r') break;
+		uartputc(c);
+		buf[i++] = c;
 	}
-	s[i] = '\0';
-	return s;
+	buf[i] = '\0';
+	return buf;
 }
+
 
 /**
  * uart_init
@@ -220,5 +230,5 @@ void uart_init(void)
     UCA1BRW = 0x6;                      //Set Baud rate 9600 : UCA1BRW = INT(F_CPU/BAUD_soll) =         INT(1MHz/9600) = 104 with oversampling: 6
     UCA1MCTLW |= UCBRS5 + UCOS16 + UCBRF3;     //Modulation according to datasheet table: UCBRS = 0x20 = b100000 and UCOS16 = 1 and UCBRF = 8 = 0x8 = b1000
 
-    UCA1CTLW0 &= ~UCSWRST;  //Reset UART module
+    UCA1CTLW0 &= ~UCSWRST;				//Reset UART module
  }
