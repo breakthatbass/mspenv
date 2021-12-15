@@ -37,8 +37,14 @@ if not os.path.exists(res.file):
 try:
     s = serial.Serial(usb)
     s.write(open(res.file, 'rb').read())
-    s.write('\r'.encode()) # done signal
-    time.sleep(1)
+    #s.write('\r'.encode()) # done signal
+    #time.sleep(1)
+    #with open(res.file, 'rb') as fp:
+     #   line = fp.readline()
+      #  while line != '':
+       #     s.write(line)
+        #    line = fp.readline()
+    s.write('\r'.encode())
     os.system(port_cmd)
 except OSError:
     print('error: usb resource not found or is busy')

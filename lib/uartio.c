@@ -209,6 +209,7 @@ char *uartgets(char *buf, int limit)
 		if (c == '\r') break;
 		uartputc(c);
 		buf[i++] = c;
+		if (c == '\n') buf[i++] = '\r';
 	}
 	buf[i] = '\0';
 	return buf;
