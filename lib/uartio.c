@@ -1,15 +1,3 @@
- /**
- * UARTprintf.c - printf for the MSP430FR5994 to send to uart
- * the function sendByte() is what directs it to UART. Otherwise, it's
- * pretty much the same as the normal printf.
-
- *
- * Taylor Gamache, 2021-11-10
- *
- * about 98% of this code comes from here:
- * https://gist.github.com/nicholasjconn/2896369#file-printf-c
- * */
-
 /******************************************************************************
 *
 *   Author: Taylor Gamache
