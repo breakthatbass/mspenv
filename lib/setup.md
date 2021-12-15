@@ -41,15 +41,12 @@ make help
 # UART
 In order to make use of the uartio lib, there is some physical setup. You'll need an [FDTI USB to Serial adapter](https://www.amazon.com/dp/B07RBK2P47?psc=1&ref=ppx_yo2_dt_b_product_details) and connect it to your board on one end, and your PC on the other end. This is how data is sent back and forth between the two systems.
 
-The `uart_init()` function is required before any reading and writing through uart. You can write your own function for that, but I wrote for quick setup. The default baud rate is 9600 and it sets port 2 pin 5 to output and port 2 pint 6 to input.
+The `uart_init()` function is required before any reading and writing through uart. You can write your own function for that, but I wrote for quick setup. The default baud rate is 9600 and it sets port 2 pin 5 to output and port 2 pin 6 to input.
 
-![uart](../img/uart.jpg)
 
-On the FDTI cable I have (the one linked above), there are six cables to use, you really only need to make use of the orange and yellow which the orange is for input and the yellow is for output. You can connect power and ground but here since we're flashing programs constantly, we already have power through the other USB connector. At the very least connect your jumper cables like the above picture.
+On the FDTI cable I have (the one linked above), there are six cables to use, you really only need to make use of the orange and yellow which the orange is for input and the yellow is for output. You can connect power and ground but here since we're flashing programs constantly, we already have power through the other USB connector. At the very least connect your jumper cables to the orange and yellow cables.
 
-[picture of jumpers on board]
-
-Connect the other end of the jumpers to the pins you're using for uart. If you're using the `uart_init()` function from the lib, that would be yellow to port 2 pin 5 and orange to port 2 pin 6 like the picture above.
+Connect the other end of the jumpers to the pins you're using for uart. If you're using the `uart_init()` function from the lib, that would be yellow to port 2 pin 5 and orange to port 2 pin 6 on the MCU.
 
 ### Opening a console
 There are many ways to open up a console to communicate with the board. On both Linux and MacOS the `screen` command works fine. It works like this:
