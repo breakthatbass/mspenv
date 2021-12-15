@@ -10,7 +10,7 @@ To do anything in this repo there is some setup. We'll need a compiler, header f
 Dowload the [`msp430-gcc`](https://www.ti.com/tool/MSP430-GCC-OPENSOURCE) toolchain and put the directory into your `$HOME` directory.  
 And clone, build, and install [`mspdebug`](https://github.com/dlbeer/mspdebug) for flashing.
 
-For full setup instructions, see the [setup page](https://github.com/breakthatbass/msp430-env/wiki/Setup#development-environment) in the wiki.
+For full setup instructions, see the [setup page](https://github.com/breakthatbass/msp430-env/wiki/Setup#development-environment) in the [wiki](https://github.com/breakthatbass/msp430-env/wiki).
 
 ## Usage
 
