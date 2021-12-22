@@ -8,4 +8,6 @@ Libraries for the `msp430fr5994` MCU.
     - [setup](https://github.com/breakthatbass/msp430-env/wiki/Setup#uart) - directions to set up your MCU for uart.
 
 2. `liblcd` - some functions to interact with an LCD.
-    - *coming soon...*
+    - [docs](https://github.com/breakthatbass/msp430-env/wiki/Documentation#lcd-driver-documentation)
+    - [source](https://github.com/breakthatbass/msp430-env/blob/main/lib/lcdlib.c)
+    - [setup](https://github.com/breakthatbass/msp430-env/wiki/Setup#lcd-and-drivers)
