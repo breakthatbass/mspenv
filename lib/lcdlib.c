@@ -78,7 +78,7 @@ void lcd_init(void) {
  * @param: `int x` - horizonal placement of cursor (0-15).
  * @param: `int y` - vertical placement of cursor (0-1).
  * */
-void lcdprint(char *s, int x, int y) {
+void lcdprintset(char *s, int x, int y) {
 	int i;
 	
 	if (x < 16) {
@@ -104,6 +104,64 @@ void lcdprint(char *s, int x, int y) {
 	}
 }
 
+/**
+ * lcdprint
+ * 
+ * @desc: print a string to an LCD and wrap text into the second line.
+ * 
+ * @param: `char *s` - string to print.
+ * */
+void lcdprint(char *s)
+{
+	cursor_p c;
+	c.x = 0;
+	c.y = 0;
+
+	int loc = 0;
+	loc |= 0x80;
+	lcdwritecmd(loc);
+
+	while (*s) {
+
+		if (c.x == 16 && c.y == 0) {
+			loc |= 0x40;
+			lcdwritecmd(loc);
+			c.y = 1;
+			c.x = 0;
+		} else if (c.x == 16 && c.y == 1) break;
+
+		lcdsetchar(*s);
+		c.x++;
+		s++;
+	}
+}
+
+
+/**
+ * lcdprint_banner
+ * 
+ * @desc: print a string across the screen like a ticker tape
+ * 
+ * note: this doesn't work
+ * 
+ * @param: `char *s` - the string to print.
+ * @param: `len` - the length of the string.
+ * */
+void lcdprint_banner(unsigned char *s, unsigned int len)
+{
+	int i = 0;
+	while (i < len && i < 32) {
+		for (int j = 0; j < 16; j++) {
+			lcdsetchar(*s);
+			i++;
+			s++;
+		}
+		delay_us(1000000);
+		lcd_clear();
+		s-=15;
+	}
+}
+
 
 /**
  * lcdprint_int
@@ -117,7 +175,7 @@ void lcdprint(char *s, int x, int y) {
 void lcdprint_int(int val, int x, int y){
 	char number_string[16] = {0};
 	sprintf(number_string, "%d", val); // Convert the integer to character string
-	lcdprint(number_string, x, y);
+	//lcdprint(number_string, x, y);
 }
 
 

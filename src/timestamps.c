@@ -17,7 +17,7 @@ void print_timestamps(void)
 {
     uartprintf("\n\n\rTIMESTAMPS:\n\n\r");
     for (unsigned int j = 0; j < 20; j++)
-        uartprintf("timestamps[%u]: %u\n", j, timestamps[j]);
+        uartprintf("timestamps[%u]: %u\n\r", j, timestamps[j]);
 }
 
 void clock_init(void)

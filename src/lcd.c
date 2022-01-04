@@ -18,6 +18,6 @@ void main(void)
 	lcd_init();
 	lcd_clear();
 
-	lcdprint("hello world!", 0, 0);
+	lcdprintset("hello world!", 0, 0);
 	__bis_SR_register(LPM0_bits);   // Enter Low Power Mode 0 without interrupts
 }

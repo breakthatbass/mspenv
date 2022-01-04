@@ -32,14 +32,29 @@ void main(void)
 
 	lcd_clear();
 	int c;
+	int i = 0;
 	while (1) {
-		i = 0;
+		//i = 0;
 		while ((c = uartgetc())) {
+			if (i == 16) {
+				do {
+					lcdgoto(0x14);
+					i++;
+				} while (i < 25);
+			}
+
 			if (c == 0x7F) {
+				if (i == 0) continue;
 				backspace();
+				i--;
+				continue;
+			} else if (c == '\r') {
+				lcdgoto(0x14);
+				i++;
 				continue;
 			}
 			lcdsetchar(c);
+			i++;
 		}
 	}
 }

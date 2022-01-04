@@ -19,14 +19,18 @@
 void main(void) {
 	WDTCTL = WDTPW | WDTHOLD;   //Stop watchdog timer
 	PM5CTL0 &= ~LOCKLPM5;
-
+	
+	P1DIR |= BIT0;
+	P1OUT |= BIT0;
 
 	uart_init();
 	unsigned char *s = "Hello, my name is Taylor";
 	unsigned int r = 34;
 
+	//uartprintf("P1DIR: %l\n\r", P1DIR);
+
 	while (1) {
-		uartprintf("%s and I am %u years old\r\n", s, r++);
+		//uartprintf("%s and I am %u years old\r\n", s, r++);
 		
 		__delay_cycles(500000L);
 	}
