@@ -9,8 +9,17 @@
  * Dec 22, 2021
  * */
 #include <msp430.h>
-#include "../lib/lcdlib.h"
+#include "../lib/lcd.h"
 #include "../lib/uartio.h"
+
+
+// backspace: move back one space, print ' ' to erase byte, then move back to that spot.
+	void backspace(void)
+	{
+		lcd_goto(0x10);
+		lcd_putc(' ');
+		lcd_goto(0x10);
+	}
 
 
 void main(void)
@@ -20,15 +29,8 @@ void main(void)
 	// unlock ports
 	PM5CTL0 &= ~LOCKLPM5;
 
-	lcd_init();
+	lcd_init(BLINK_ON);
 	uart_init();
-
-	void backspace(void)
-	{
-		lcdgoto(0x10);
-		lcdsetchar(' ');
-		lcdgoto(0x10);
-	}
 
 	lcd_clear();
 	int c;
@@ -38,7 +40,7 @@ void main(void)
 		while ((c = uartgetc())) {
 			if (i == 16) {
 				do {
-					lcdgoto(0x14);
+					lcd_goto(0x14);
 					i++;
 				} while (i < 25);
 			}
@@ -49,11 +51,11 @@ void main(void)
 				i--;
 				continue;
 			} else if (c == '\r') {
-				lcdgoto(0x14);
+				lcd_goto(0x14);
 				i++;
 				continue;
 			}
-			lcdsetchar(c);
+			lcd_putc(c);
 			i++;
 		}
 	}

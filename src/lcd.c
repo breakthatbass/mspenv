@@ -5,7 +5,7 @@
  * Dec 22, 2021
  * */
 #include <msp430fr5994.h>
-#include "../lib/lcdlib.h"
+#include "../lib/lcd.h"
 
 
 void main(void)
@@ -15,9 +15,8 @@ void main(void)
 	// unlock ports
 	PM5CTL0 &= ~LOCKLPM5;
 
-	lcd_init();
-	lcd_clear();
+	lcd_init(BLINK_OFF);
 
-	lcdprintset("hello world!", 0, 0);
+	lcd_print_xy("hello world!", 0, 0);
 	__bis_SR_register(LPM0_bits);   // Enter Low Power Mode 0 without interrupts
 }

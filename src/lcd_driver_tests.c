@@ -6,32 +6,33 @@
  * Jan 4, 2022
  * */
 #include <msp430fr5994.h>
-#include "../lib/lcdlib.h"
+#include "../lib/lcd.h"
+
+#define SEC 2000000
 
 void main(void)
 {
-	WDTCTL = WDTPW | WDTHOLD;
-	PM5CTL0 &= ~LOCKLPM5;
+    WDTCTL = WDTPW | WDTHOLD;   // put the dawg to sleep
+    PM5CTL0 &= ~LOCKLPM5;       // unlock ports
 
-	lcd_init();
-	lcd_clear();
+    // init LCD with cursor blinking set to off
+    lcd_init(BLINK_OFF);
 
-	// lcdprint()
-	//
-	// print 16 characters on first line, then continue on
-	// second line to print 16 more. anything beyond doesn't get printed.
-	// should look like this
-	// _________________________________
-	// |h|e|l|l|o|,| |m|y| |n|a|m|e| |i|
-	// |s| |t|a|y|l|o|r|.| |w|h|a|t| |i|
-	// 
-	lcdprint("hello, my name is taylor. what is your name?");
-	__delay_cycles(9000000);
-	lcd_clear();
+    // print a single char to LCD
+    lcd_putc('a');
 
-	unsigned char *s = "this is a really long string that will scroll";
+    // hold for about a second then clear LCD
+    __delay_cycles(SEC);
+    lcd_clear();
 
-	lcdprint_banner(s, 40);
+    // print a string to LCD and wrap it to 2nd row
+    lcd_puts("hello, my name is taylor. LCDs are cool");
 
-	while (1) {}
+    __delay_cycles(SEC);
+    lcd_clear();
+
+    // print a string starting at a specific x, y point
+    lcd_print_xy("aloha", 3, 1);
+
+    while(1);
 }
