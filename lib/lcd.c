@@ -134,6 +134,90 @@ void lcd_puts(char *s)
 }
 
 
+/****** helper functions for printf *******/
+
+static const unsigned long dv[] = {
+//  4294967296      // 32 bit unsigned max
+		1000000000,// +0
+		100000000, // +1
+		10000000, // +2
+		1000000, // +3
+		100000, // +4
+//       65535      // 16 bit unsigned max
+		10000, // +5
+		1000, // +6
+		100, // +7
+		10, // +8
+		1 // +9
+};
+
+
+// convert hex to int
+static void xtoa(unsigned long x, const unsigned long *dp) {
+	char c;
+	unsigned long d;
+	if (x) {
+		while (x < *dp)
+			++dp;
+		do {
+			d = *dp++;
+			c = '0';
+			while (x >= d)
+				++c, x -= d;
+			lcd_putc(c);
+		} while (!(d & 1));
+	} else
+		lcd_putc('0');
+}
+
+
+/**
+ * lcd_printf: d, x, u, c, s, f, p
+ *
+ * @desc: printf function for the LCD
+ *
+ * */
+void lcd_printf(char *fmt, ...)
+{
+	char *sval;	// for dealing with string values
+	int nval;
+
+	va_list ap;
+	va_start(ap, fmt);
+
+	char *p = fmt;
+
+	while (*p) {
+		if (*p != '%') {
+			lcd_putc(*p);
+			p++;
+			continue;
+		}
+		switch (*++p) {
+		// int
+		case 'd':
+			nval = va_arg(ap, int);
+			xtoa((unsigned) nval, dv+5);
+			break;
+		// string
+		case 's':
+			sval = va_arg(ap, char *);
+			while (*sval)
+				lcd_putc(*sval++);
+			break;
+		case '%':
+			lcd_putc('%');
+			break;
+		default:
+			lcd_putc(*p);
+			break;
+		}
+		p++;
+	}
+	va_end(ap);
+}
+
+
 /**
  * lcd_put_xy
  *
