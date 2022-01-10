@@ -171,6 +171,15 @@ static void xtoa(unsigned long x, const unsigned long *dp) {
 }
 
 
+// print a hex char
+static void puth(unsigned n)
+{
+	static const char hex[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
+			'9', 'A', 'B', 'C', 'D', 'E', 'F' };
+	lcd_putc(hex[n & 15]);
+}
+
+
 /**
  * lcd_printf: d, x, u, c, s, f, p
  *
@@ -179,8 +188,9 @@ static void xtoa(unsigned long x, const unsigned long *dp) {
  * */
 void lcd_printf(char *fmt, ...)
 {
-	char *sval;	// for dealing with string values
-	int nval;
+	char *s;	// for dealing with string values
+	int n;
+	float f;
 
 	va_list ap;
 	va_start(ap, fmt);
@@ -188,22 +198,41 @@ void lcd_printf(char *fmt, ...)
 	char *p = fmt;
 
 	while (*p) {
+
 		if (*p != '%') {
 			lcd_putc(*p);
 			p++;
 			continue;
 		}
+
 		switch (*++p) {
+		// char
+		case 'c':
+			n = va_arg(ap, int);
+			lcd_putc(n);
+			break;
 		// int
 		case 'd':
-			nval = va_arg(ap, int);
-			xtoa((unsigned) nval, dv+5);
+			n = va_arg(ap, int);
+			if (n  < 0) {
+				n = -n;
+				lcd_putc('-');
+			}
+			xtoa((unsigned) n, dv+5);
 			break;
 		// string
 		case 's':
-			sval = va_arg(ap, char *);
-			while (*sval)
-				lcd_putc(*sval++);
+			s = va_arg(ap, char *);
+			while (*s)
+				lcd_putc(*s++);
+			break;
+		// hex
+		case 'x':
+			n = va_arg(ap, int);
+			puth(n >> 12);
+			puth(n >> 8);
+			puth(n >> 4);
+			puth(n);
 			break;
 		case '%':
 			lcd_putc('%');
