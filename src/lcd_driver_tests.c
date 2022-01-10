@@ -16,11 +16,22 @@ void main(void)
     PM5CTL0 &= ~LOCKLPM5;       // unlock ports
 
     // init LCD with cursor blinking set to off
-    lcd_init(BLINK_OFF);
-	char *n = "tay";
-	int age = 82;
+    lcd_init(BLINK_ON);
 
-	lcd_printf("name: %s a %d", n, age);
+    __delay_cycles(SEC);
+
+    lcd_goto(4, 1);
+
+    __delay_cycles(SEC);
+    lcd_putc('c');
+    __delay_cycles(SEC);
+    lcd_goto(13, 0);
+    __delay_cycles(SEC);
+    lcd_putc('d');
+
+
+    /*
+	lcd_printf(3, 1, "my name is %s", n);
 
 	__delay_cycles(SEC);
 	lcd_clear();
@@ -37,9 +48,10 @@ void main(void)
 
     __delay_cycles(SEC);
     lcd_clear();
-
+    
     // print a string starting at a specific x, y point
     lcd_print_xy("aloha", 3, 1);
+    */
 
     while(1);
 }

@@ -27,7 +27,9 @@ void lcd_init(unsigned int blink_option);        // init
 void lcd_clear(void);                            // clear the screen
 void lcd_putc(unsigned char c);                  // print a char to LCD at current cursor position
 void lcd_puts(char *s);                          // print a string to LCD at current cursor position
-void lcd_printf(char *fmt, ...);
-void lcd_print_xy(char *s, int x, int y);        // print a string to LCD at specfifc position
+void lcd_printf(int x, int y, char *fmt, ...);   // printf for LCD. conversions: x, c, d, s
+void lcd_putc_xy(int x, int y, unsigned char c); // print a char to LCV at specific cursor position
+void lcd_puts_xy(int x, int y, char *s);         // print a string to LCD at specfifc cursor position
+void lcd_goto(int x, int y);                     // move cursor to a specfic position
 
 #endif

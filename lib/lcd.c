@@ -4,7 +4,7 @@
  * Email: gamache.taylor@gmail.com
  * url: https://github.com/breakthatbass/msp430_lcd_driver
  *
- * Version: 0.0.1
+ * Version: 0.0.2
  * License: MIT 2021
  *
  * @name: msp430 LCD device driver
@@ -14,6 +14,7 @@
 #include "lcd.h"
 
 #define	LOWNIB(x) P3OUT = (P3OUT & 0xF0) + (x & 0x0F)
+
 
 // flip a switch in the enable bus
 static void lcd_trigger_EN(void)
@@ -32,6 +33,29 @@ static void lcd_cmd(unsigned char cmd)
 	LOWNIB(cmd);		// lower nibble
 	lcd_trigger_EN();
 	delay_ms(5);		// delay about 1.5ms
+}
+
+
+// plaec the cursor at a specfic point
+static void place_cursor(int x, int y)
+{
+	if (x < 16) {
+		
+		x |= 0x80; // set LCD for first line write
+		
+		switch (y) {
+		case 1:
+			x |= 0x40; // set LCD for second line write
+			break;
+		case 2:
+			x |= 0x60; // set LCD for first line write reverse
+			break;
+		case 3:
+			x |= 0x20; // set LCD for second line write reverse
+			break;
+		}
+		lcd_cmd(x);
+	}
 }
 
 
@@ -134,16 +158,66 @@ void lcd_puts(char *s)
 }
 
 
-/****** helper functions for printf *******/
+/**
+ * lcd_puts_xy
+ *
+ * @desc: print a string to the LCD in a specific location.
+ *
+ * @param: `x` - horizonal placement of cursor (0-15).
+ * @param: `y` - vertical placement of cursor (0-1).
+ * @param: `s` - the string to write.
+ * */
+void lcd_puts_xy(int x, int y, char *s)
+{
+	place_cursor(x, y);
+
+	while (*s) {
+		lcd_putc(*s);
+		s++;
+	}
+}
+
+
+/**
+ * lcd_put_c
+ *
+ * @desc: print a char to the LCD in a specific location.
+ *
+ * @param: `x` - horizonal placement of cursor (0-15).
+ * @param: `y` - vertical placement of cursor (0-1).
+ * @parak: `c` - the char to write.
+ * */
+void lcd_putc_xy(int x, int y, unsigned char c)
+{
+	place_cursor(x, y);
+	lcd_putc(c);
+}
+
+
+/**
+ * lcd_goto
+ *
+ * @desc: move the cursor to a specific location.
+ *
+ * @param: `x` - horizonal placement of cursor (0-15).
+ * @param: `y` - vertical placement of cursor (0-1).
+ * */
+void lcd_goto(int x, int y)
+{
+	place_cursor(x, y);
+}
+
+
+// helper functions for printf ///////////////////////////////////////////
 
 static const unsigned long dv[] = {
-//  4294967296      // 32 bit unsigned max
-		1000000000,// +0
+// 4294967296        // 32 bit unsigned max
+		1000000000, // +0
 		100000000, // +1
 		10000000, // +2
 		1000000, // +3
 		100000, // +4
-//       65535      // 16 bit unsigned max
+// 65535       // 16 bit unsigned max
 		10000, // +5
 		1000, // +6
 		100, // +7
@@ -153,7 +227,8 @@ static const unsigned long dv[] = {
 
 
 // convert hex to int
-static void xtoa(unsigned long x, const unsigned long *dp) {
+static void xtoa(unsigned long x, const unsigned long *dp)
+{
 	char c;
 	unsigned long d;
 	if (x) {
@@ -183,10 +258,14 @@ static void puth(unsigned n)
 /**
  * lcd_printf:
  *
- * @desc: printf for the LCD. Conversions: x, c, d, s
- *
+ * @desc: printf for the LCD. Conversions: `%x`, `%c`, `%d`, `%s`.
+ * 
+ * @param: `x` - horizonal placement of cursor (0-15).
+ * @param: `y` - vertical placement of cursor (0-1).
+ * @param: `fmt` - the string to print.
+ * @param: `...` - the list of variables to fill in.
  * */
-void lcd_printf(char *fmt, ...)
+void lcd_printf(int x, int y, char *fmt, ...)
 {
 	char *s;	// for dealing with string values
 	int n;
@@ -194,11 +273,12 @@ void lcd_printf(char *fmt, ...)
 
 	va_list ap;
 	va_start(ap, fmt);
+	place_cursor(x, y);
 
 	char *p = fmt;
 
 	while (*p) {
-
+		
 		if (*p != '%') {
 			lcd_putc(*p);
 			p++;
@@ -225,12 +305,12 @@ void lcd_printf(char *fmt, ...)
 			s = va_arg(ap, char *);
 			while (*s)
 				lcd_putc(*s++);
-			break;:w
+			break;
 
 		// hex
 		case 'x':
 			n = va_arg(ap, int);
-			puth(n >> 12);
+			puth(n >> 12); 
 			puth(n >> 8);
 			puth(n >> 4);
 			puth(n);
@@ -245,39 +325,4 @@ void lcd_printf(char *fmt, ...)
 		p++;
 	}
 	va_end(ap);
-}
-
-
-/**
- * lcd_put_xy
- *
- * @desc: print a string to the LCD in a specific location.
- *
- * @param: `s` - the string to write.
- * @param: `x` - horizonal placement of cursor (0-15).
- * @param: `y` - vertical placement of cursor (0-1).
- * */
-void lcd_print_xy(char *s, int x, int y)
-{
-
-	if (x < 16) {
-		x |= 0x80; // set LCD for first line write
-		switch (y){
-		case 1:
-			x |= 0x40; // set LCD for second line write
-			break;
-		case 2:
-			x |= 0x60; // set LCD for first line write reverse
-			break;
-		case 3:
-			x |= 0x20; // set LCD for second line write reverse
-			break;
-		}
-	lcd_cmd(x);
-	}
-
-	while (*s) {
-		lcd_putc(*s);
-		s++;
-	}
 }
