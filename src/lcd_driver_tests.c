@@ -17,6 +17,13 @@ void main(void)
 
     // init LCD with cursor blinking set to off
     lcd_init(BLINK_OFF);
+	char *n = "tay";
+	int age = 82;
+
+	lcd_printf("name: %s a %d", n, age);
+
+	__delay_cycles(SEC);
+	lcd_clear();
 
     // print a single char to LCD
     lcd_putc('a');

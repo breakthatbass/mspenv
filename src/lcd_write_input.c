@@ -12,7 +12,7 @@
 #include "../lib/lcd.h"
 #include "../lib/uartio.h"
 
-
+/*
 // backspace: move back one space, print ' ' to erase byte, then move back to that spot.
 	void backspace(void)
 	{
@@ -21,7 +21,7 @@
 		lcd_goto(0x10);
 	}
 
-
+*/
 void main(void)
 {
 	// put the dog to sleep
@@ -40,18 +40,20 @@ void main(void)
 		while ((c = uartgetc())) {
 			if (i == 16) {
 				do {
-					lcd_goto(0x14);
+				
+				
+				//	lcd_goto(0x14);
 					i++;
 				} while (i < 25);
 			}
 
 			if (c == 0x7F) {
 				if (i == 0) continue;
-				backspace();
+				//backspace();
 				i--;
 				continue;
 			} else if (c == '\r') {
-				lcd_goto(0x14);
+				//lcd_goto(0x14);
 				i++;
 				continue;
 			}
