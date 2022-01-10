@@ -181,9 +181,9 @@ static void puth(unsigned n)
 
 
 /**
- * lcd_printf: d, x, u, c, s, f, p
+ * lcd_printf:
  *
- * @desc: printf function for the LCD
+ * @desc: printf for the LCD. Conversions: x, c, d, s
  *
  * */
 void lcd_printf(char *fmt, ...)
@@ -225,7 +225,8 @@ void lcd_printf(char *fmt, ...)
 			s = va_arg(ap, char *);
 			while (*s)
 				lcd_putc(*s++);
-			break;
+			break;:w
+
 		// hex
 		case 'x':
 			n = va_arg(ap, int);
