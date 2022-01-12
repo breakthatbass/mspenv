@@ -15,6 +15,13 @@ And clone, build, and install [`mspdebug`](https://github.com/dlbeer/mspdebug) f
 
 For full setup instructions and more details than here, see the [setup page](https://github.com/breakthatbass/msp430-env/wiki/Setup#development-environment) in the [wiki](https://github.com/breakthatbass/msp430-env/wiki).
 
+## Installation
+Run the following script to install and fresh template for a new project. You must still manually install the tools listed above.
+TODO: add mspdebug in the installation script
+```sh
+sh -c "`curl -fsSl https://raw.githubusercontent.com/breakthatbass/msp430-env/main/install.sh`"
+```
+
 ## Usage
 
 **Setting up a new project**  
