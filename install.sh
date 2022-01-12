@@ -3,6 +3,9 @@
 # TODO:
 # 1. add checks prevent '' from being submitted when reading from stdin
 # 2. add colors and emojis to make the installation process more fun
+# 3. rm install.sh
+# 4. add option to rewrite makefile to compile as a single project binary
+# instead of many
 
 printf "what do you want to name your mps430 project?: "
 
