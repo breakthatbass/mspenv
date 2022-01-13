@@ -4,8 +4,8 @@
  * a simple program to record timestamps from CPU clock into an array
  * at interrupts. after 20 timestamps, print them out, then do nothing.
  * */
-#include <msp430fr5994.h>
-#include "../lib/uartio.h"
+#include <msp430.h>
+#include <lib/uartio.h>
 
 #define BUF 50
 #define IF 1
@@ -15,9 +15,9 @@ volatile unsigned int i = 0;
 
 void print_timestamps(void)
 {
-    uartprintf("\n\n\rTIMESTAMPS:\n\n\r");
+    uart_printf("\nTIMESTAMPS:\n");
     for (unsigned int j = 0; j < 20; j++)
-        uartprintf("timestamps[%u]: %u\n\r", j, timestamps[j]);
+        uart_printf("timestamps[%d]: %d\n", j, timestamps[j]);
 }
 
 void clock_init(void)

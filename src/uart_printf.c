@@ -9,7 +9,7 @@
  *
  * screen /dev/cu.usbserial-AR0JW545 9600
  * */
-#include <msp430fr5994.h>
+#include <msp430.h>
 #include <lib/uartio.h>
 
 void main(void) {
@@ -24,6 +24,14 @@ void main(void) {
 
 	uart_printf("hello, my name is %s and I am %d years old.\n", name, r);
 
+	// test out the hex capability
+	// turn on LED P1.1 (right side green LED)
+	P1DIR |= BIT1;
+	uart_printf("P1DIR: %x\n", P1DIR);
+	P1OUT |= BIT1;
+	uart_printf("P1OUT: %x\n", P1OUT);
+	uart_puts("\ntesting puts for hex vals:\n");
+	uart_putx(P1OUT);
+
 	while (1);
 }
-

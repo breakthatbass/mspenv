@@ -170,6 +170,22 @@ static void puth(unsigned n)
 	uart_putc(hex[n & 15]);
 }
 
+/**
+ * uart_putx
+ * 
+ * @desc: print a hex value
+ * 
+ * @param: `n` - an unsigned integer.
+ * */
+void uart_putx(unsigned n)
+{
+	puth(n >> 12); 
+	puth(n >> 8);
+	puth(n >> 4);
+	puth(n);
+	uart_putc('\n');
+	uart_putc('\r');
+}
 
 /**
  * uart_printf
