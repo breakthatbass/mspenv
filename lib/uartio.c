@@ -133,11 +133,15 @@ void uartprintf(char *format, ...)
  * @param: `s` - print each `char` in `s` to an open UART console.
  * */
 void uartputs(char *s) {
-	char c;
-
-	while (c = *s++) {
-		uart_putc(c);
+	while (*s) {
+		if (*s == '\n') {
+			uart_putc('\n');
+			uart_putc('\r');
+		} else uart_putc(*s);
+		s++;
 	}
+	uart_putc('\n');
+	uart_putc('\r');
 }
 
 
@@ -206,6 +210,7 @@ char *uart_gets(char *buf, int limit)
 			buf[--i] = 0;
 			limit++;
 		} else {
+			uart_putc(c);
 			buf[i++] = c;
 		}
 	}
