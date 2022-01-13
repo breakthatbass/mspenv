@@ -1,22 +1,19 @@
 #ifndef __UARTIO_H__
 #define __UARTIO_H__
 
-// printf but for the msp430 and UART
-void uartprintf(char *format, ...);
+#include <msp430.h>
+#include "stdarg.h"
 
-// push byte to transfer register 
-void uart_putc(unsigned char byte);
+void uart_init(void);                   // set up pins for uart connection
 
-// recieve byte frim recieve register
-unsigned char uart_getc(void);
+void uart_printf(char *format, ...);    // printf but for the msp430
 
-// print all bytes in a string to transfer register
-void uart_puts(char *s);
+void uart_putc(unsigned char byte);     // send a byte through TX register
 
-// get string from user and push all bytes to recieve register
-char *uart_gets(char *buf, int limit);
+unsigned char uart_getc(void);          // receive a byte from RX register
 
-// set up port/pins for uart communication
-void uart_init(void);
+void uart_puts(char *s);                // send all bytes in a string through TX
+
+char *uart_gets(char *buf, int limit);  // receive all bytes from a user through RX
 
 #endif

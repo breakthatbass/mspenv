@@ -10,7 +10,7 @@
  * screen /dev/cu.usbserial-AR0JW545 9600
  * */
 #include <msp430fr5994.h>
-#include "../lib/uartio.h"
+#include <lib/uartio.h>
 
 void main(void) {
 	WDTCTL = WDTPW | WDTHOLD;   //Stop watchdog timer
@@ -22,7 +22,7 @@ void main(void) {
 	unsigned char *name = "Taylor";
 	unsigned int r = 34;
 
-	uartprintf("hello, my name is %s and I am %d years old.\n", name, r);
+	uart_printf("hello, my name is %s and I am %d years old.\n", name, r);
 
 	while (1);
 }
