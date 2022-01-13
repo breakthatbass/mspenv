@@ -5,11 +5,11 @@
 *	url: https://github.com/breakthatbass/msp430_UART
 *
 *   @name: uartio
-*   @description: a handful of basic functions to read and write to UART for the msp430 MCU.
+*   @description: a simple and easy to use API for connecting an msp430 to another device through UART.
 *
 ******************************************************************************/
 #include <msp430.h>
-#include "stdarg.h"
+
 #include "uartio.h"
 
 
