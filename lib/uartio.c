@@ -60,79 +60,86 @@ static void puth(unsigned n) {
 	uart_putc(hex[n & 15]);
 }
 
-/****
- *
- * uartio API
- *
- ****/
 
 /**
  * uartprintf
  *
- * @desc: printf but for the msp430 MCU to print to UART. Requires uart_init()`.
+ * @desc: printf but for the msp430 MCU to print to UART.
  * 
- * @todo: make int capability. for now, it requires unsigned.
+ * @param: `fmt` - the string to print.
+ * @param: `...` - the list of variables to fill in.
  * */
-void uartprintf(char *format, ...)
+void uartprintf(char *fmt, ...)
 {
-	char c;
-	int i;
-	long n;
+	char *s;	// for dealing with string values
+	int n;
+	float f;
 
-	va_list a;
-	va_start(a, format);
-	while(c = *format++) {
-		if(c == '%') {
-			switch(c = *format++) {
-				case 's': // String
-					uartputs(va_arg(a, char*));
-					break;
-				case 'c':// Char
-					uart_putc(va_arg(a, int));
-				break;
-				case 'i':// 16 bit Integer
-				case 'u':// 16 bit Unsigned
-					i = va_arg(a, int);
-					if (c == 'i' && i < 0) {
-						i = -i;
-						uart_putc('-');
-					}
-					xtoa((unsigned)i, dv + 5);
-				break;
-				case 'l':// 32 bit Long
-				case 'n':// 32 bit uNsigned loNg
-					n = va_arg(a, long);
-					if (c == 'l' && n < 0) {
-						n = -n; 
-						uart_putc('-');
-					}
-					xtoa((unsigned long)n, dv);
-				break;
-				case 'x':// 16 bit heXadecimal
-					i = va_arg(a, int);
-					puth(i >> 12);
-					puth(i >> 8);
-					puth(i >> 4);
-					puth(i);
-				break;
-				case 0: return;
-				default: goto bad_fmt;
+	va_list ap;
+	va_start(ap, fmt);
+
+	char *p = fmt;
+
+	while (*p) {
+		
+		if (*p != '%') {
+			uart_putc(*p);
+			p++;
+			continue;
+		}
+
+		switch (*++p) {
+		// char
+		case 'c':
+			n = va_arg(ap, int);
+			uart_putc(n);
+			break;
+		// int
+		case 'd':
+			n = va_arg(ap, int);
+			if (n  < 0) {
+				n = -n;
+				uart_putc('-');
 			}
-		} else
-			bad_fmt: uart_putc(c);
+			xtoa((unsigned) n, dv+5);
+			break;
+		// string
+		case 's':
+			s = va_arg(ap, char *);
+			while (*s)
+				uart_putc(*s++);
+			break;
+
+		// hex
+		case 'x':
+			n = va_arg(ap, int);
+			puth(n >> 12); 
+			puth(n >> 8);
+			puth(n >> 4);
+			puth(n);
+			break;
+		case '%':
+			uart_putc('%');
+			break;
+		default:
+			uart_putc(*p);
+			break;
+		}
+		p++;
 	}
-	va_end(a);
+	uart_putc('\r');
+	va_end(ap);
 }
 
 
 /**
- * uartputs
+ * uart_puts
  *
  * @desc: print a string through UART
  *
  * @param: `s` - print each `char` in `s` to an open UART console.
  * */
-void uartputs(char *s) {
+void uart_puts(char *s) {
 	while (*s) {
 		if (*s == '\n') {
 			uart_putc('\n');
@@ -146,7 +153,7 @@ void uartputs(char *s) {
 
 
 /**
- * uartputc
+ * uart_putc
  *
  * @desc: Send a single byte to the transmit buffer register.
  *
@@ -162,7 +169,7 @@ void uart_putc(unsigned char byte)
 
 
 /**
- * uartgetc
+ * uart_getc
  *
  * @desc: attempt to read a byte stored in the recieve buffer register.
  *
@@ -181,7 +188,7 @@ unsigned char uart_getc(void)
 
 
 /**
- * uartgets
+ * uart_gets
  *
  * @desc: read an entire line/string into `buf`.
  *

@@ -11,7 +11,7 @@ void uart_putc(unsigned char byte);
 unsigned char uart_getc(void);
 
 // print all bytes in a string to transfer register
-void uartputs(char *s);
+void uart_puts(char *s);
 
 // get string from user and push all bytes to recieve register
 char *uart_gets(char *buf, int limit);

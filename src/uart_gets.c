@@ -18,11 +18,11 @@ void main(void)
     char buf[MAXLINE] = {0};
 
 	uart_init();
-    uartputs("\nuart_gets() tests\n");
+    uart_puts("\nuart_gets() tests\n");
 
 	while (1) {
         // read in a line to buf[]
         uart_gets(buf, MAXLINE);
-        uartputs(buf);
+        uart_puts(buf);
     }
 }

@@ -16,7 +16,7 @@ void main(void)
     char c;
 
 	uart_init();
-    uartputs("\n\r\n\ruart_getc() tests\n\r");
+    uart_puts("\nuart_getc() tests\n");
 
 	while (1) {
 
@@ -37,7 +37,7 @@ void main(void)
             uart_putc('\b');
             uart_putc(' ');
             uart_putc('\b');
-            
+
         } else uart_putc(c);
     }
 }

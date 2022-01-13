@@ -1,5 +1,5 @@
  /**
- * uart.c - a simple program to test out the uartprintf() function.
+ * uart_printf.c - a simple program to test out the uartprintf() function.
  *
  * an FTDI cable is needed to connect the UART pins to the computer.
  * from there run the command `screen <location-of-device> <baud rate>`
@@ -8,31 +8,22 @@
  * in this case on MacOS I ran:
  *
  * screen /dev/cu.usbserial-AR0JW545 9600
- *
  * */
 #include <msp430fr5994.h>
 #include "../lib/uartio.h"
 
-#define COUNTER_VALUE 1250
-
-
 void main(void) {
 	WDTCTL = WDTPW | WDTHOLD;   //Stop watchdog timer
 	PM5CTL0 &= ~LOCKLPM5;
-	
-	P1DIR |= BIT0;
-	P1OUT |= BIT0;
 
 	uart_init();
-	unsigned char *s = "Hello, my name is Taylor";
+	uart_puts("\nprintf tests\n");
+
+	unsigned char *name = "Taylor";
 	unsigned int r = 34;
 
-	//uartprintf("P1DIR: %l\n\r", P1DIR);
+	uartprintf("hello, my name is %s and I am %d years old.\n", name, r);
 
-	while (1) {
-		//uartprintf("%s and I am %u years old\r\n", s, r++);
-		
-		__delay_cycles(500000L);
-	}
+	while (1);
 }
 
