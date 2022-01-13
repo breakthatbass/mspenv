@@ -17,6 +17,7 @@
 #include "stddef.h"  // for NULL
 
 
+
 static const unsigned long dv[] = {
 //  4294967296      // 32 bit unsigned max
 		1000000000,// +0
@@ -45,10 +46,10 @@ static void xtoa(unsigned long x, const unsigned long *dp) {
 			c = '0';
 			while (x >= d)
 				++c, x -= d;
-			uartputc(c);
+			uart_putc(c);
 		} while (!(d & 1));
 	} else
-		uartputc('0');
+		uart_putc('0');
 }
 
 
@@ -56,7 +57,7 @@ static void xtoa(unsigned long x, const unsigned long *dp) {
 static void puth(unsigned n) {
 	static const char hex[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
 			'9', 'A', 'B', 'C', 'D', 'E', 'F' };
-	uartputc(hex[n & 15]);
+	uart_putc(hex[n & 15]);
 }
 
 /****
@@ -87,14 +88,14 @@ void uartprintf(char *format, ...)
 					uartputs(va_arg(a, char*));
 					break;
 				case 'c':// Char
-					uartputc(va_arg(a, int));
+					uart_putc(va_arg(a, int));
 				break;
 				case 'i':// 16 bit Integer
 				case 'u':// 16 bit Unsigned
 					i = va_arg(a, int);
 					if (c == 'i' && i < 0) {
 						i = -i;
-						uartputc('-');
+						uart_putc('-');
 					}
 					xtoa((unsigned)i, dv + 5);
 				break;
@@ -103,7 +104,7 @@ void uartprintf(char *format, ...)
 					n = va_arg(a, long);
 					if (c == 'l' && n < 0) {
 						n = -n; 
-						uartputc('-');
+						uart_putc('-');
 					}
 					xtoa((unsigned long)n, dv);
 				break;
@@ -118,7 +119,7 @@ void uartprintf(char *format, ...)
 				default: goto bad_fmt;
 			}
 		} else
-			bad_fmt: uartputc(c);
+			bad_fmt: uart_putc(c);
 	}
 	va_end(a);
 }
@@ -135,7 +136,7 @@ void uartputs(char *s) {
 	char c;
 
 	while (c = *s++) {
-		uartputc(c);
+		uart_putc(c);
 	}
 }
 
@@ -147,7 +148,7 @@ void uartputs(char *s) {
  *
  * @param: `byte` - byte to send to transmit buffer register.
  * */
-void uartputc(unsigned char byte)
+void uart_putc(unsigned char byte)
 {
 	// USCI_A0 TX buffer ready?
     while(!(UCA1IFG & UCTXIFG));
@@ -163,12 +164,14 @@ void uartputc(unsigned char byte)
  *
  * @return: if a byte is found, return byte, else return `-1`.
  * */
-int uartgetc(void)
+unsigned char uart_getc(void)
 {
     int c = -1;
     while(!(UCA1IFG & UCRXIFG));
     while(!UCA1RXBUF);
-    c = UCA1RXBUF;
+	// wait here for user input
+	while (c == -1)
+    	c = UCA1RXBUF;
     return c;
 }
 
@@ -183,17 +186,30 @@ int uartgetc(void)
  *
  * @return: `buf` with the bytes stored in its memory space.
  * */
-char *uartgets(char *buf, int limit)
+char *uart_gets(char *buf, int limit)
 {
-	int c, i;
+	unsigned char c;
+	int i;
+
 	i = 0;
-	while ((c = uartgetc()) && --limit) {
-		if (c == '\r') break;
-		uartputc(c);
-		buf[i++] = c;
-		if (c == '\n') buf[i++] = '\r';
+
+	while (--limit) {
+		c = uart_getc();
+		if (c == '\r') {
+			uart_putc('\n');
+            uart_putc('\r');
+			break;
+		} else if (c == 0x7f) {
+			uart_putc('\b');
+            uart_putc(' ');
+            uart_putc('\b');
+			buf[--i] = 0;
+			limit++;
+		} else {
+			buf[i++] = c;
+		}
 	}
-	buf[i] = '\0';
+	buf[i] = 0;
 	return buf;
 }
 

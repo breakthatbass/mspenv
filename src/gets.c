@@ -18,7 +18,7 @@ void main(void)
 
 	while (1) {
 		uartprintf("what is your name?\n\r");
-		uartgets(b, 20);
+		uart_gets(b, 20);
 		__delay_cycles(10000);
 		uartprintf("\n\rhello, %s\n\r", b);
 	}

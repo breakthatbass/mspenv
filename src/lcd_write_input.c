@@ -37,7 +37,7 @@ void main(void)
 	int i = 0;
 	while (1) {
 		//i = 0;
-		while ((c = uartgetc())) {
+		while ((c = uart_getc())) {
 			if (i == 16) {
 				do {
 				
