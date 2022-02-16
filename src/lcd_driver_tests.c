@@ -20,15 +20,17 @@ void main(void)
 
     __delay_cycles(SEC);
 
-    lcd_goto(4, 1);
+    //lcd_goto(4, 1);
 
-    __delay_cycles(SEC);
-    lcd_putc('c');
-    __delay_cycles(SEC);
-    lcd_goto(13, 0);
-    __delay_cycles(SEC);
-    lcd_putc('d');
-
+    //__delay_cycles(SEC);
+    //lcd_putc('c');
+    //__delay_cycles(SEC);
+    //lcd_goto(13, 0);
+    //__delay_cycles(SEC);
+    //lcd_putc('d');
+	lcd_printf(0,0, "hello in there!");
+	__delay_cycles(SEC);
+	lcd_puts("poo berries");
 
     /*
 	lcd_printf(3, 1, "my name is %s", n);

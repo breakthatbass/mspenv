@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+#
+# connect to a port to communicate with a MCU through UART
+#
+# usage: ./msp [port]
+# port argument is optional
+
+import glob
+import os
+import sys
+
+port = None
+
+if len(sys.argv) > 1:
+    port = sys.argv[1]
+
+if port == None:
+    if sys.platform == 'darwin':
+        port = '/dev/cu.usbserial-*'
+    elif sys.platform == 'linux':
+        # there are some weird permissions, this needs to be run every session
+        os.system('sudo chmod 666 /dev/ttyUSB0')
+        # seems to always be ttyUSB0 if it's linux
+        port = '/dev/ttyUSB0'
+    else:
+        print('OS not supported. manually input the UART port location.')
+        print('usage: ./mspsh <port>')
+        sys.exit(1)
+
+# not sure if this will work on your system
+try:
+    port_check = glob.glob(port)[0]
+except IndexError:
+    print(f'port: {port} not found.\nmake sure UART FDTI cable or USB is plugged in')
+    print('if it is, try unplugging it and plugging it back in')
+    print('\nusage: ./mspsh <port>')
+    sys.exit(2)
+
+print(f'connecting to port: {port_check}')
+open_UART = f'screen {port_check} 9600'
+
+os.system(open_UART)
+

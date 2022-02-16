@@ -12,16 +12,16 @@
 #include "../lib/lcd.h"
 #include "../lib/uartio.h"
 
-/*
-// backspace: move back one space, print ' ' to erase byte, then move back to that spot.
-	void backspace(void)
-	{
-		lcd_goto(0x10);
-		lcd_putc(' ');
-		lcd_goto(0x10);
-	}
 
-*/
+// backspace: move back one space, print ' ' to erase byte, then move back to that spot.
+void backspace(int x, int y)
+{
+	lcd_goto(x-1, y);
+	lcd_putc(' ');
+	lcd_goto(x-1, y);
+}
+
+
 void main(void)
 {
 	// put the dog to sleep
@@ -33,32 +33,36 @@ void main(void)
 	uart_init();
 
 	lcd_clear();
-	int c;
-	int i = 0;
-	while (1) {
-		//i = 0;
-		while ((c = uart_getc())) {
-			if (i == 16) {
-				do {
-				
-				
-				//	lcd_goto(0x14);
-					i++;
-				} while (i < 25);
-			}
+	unsigned int c, x, y;
 
-			if (c == 0x7F) {
-				if (i == 0) continue;
-				//backspace();
-				i--;
+	x = 0;
+	y = 0;
+
+	while ((c = uart_getc())) {
+		if (c == 0x7f) {
+			if (x == 0 && y == 1) {
+				x = 15;
+				y = 0;
+				lcd_goto(x, y);
 				continue;
-			} else if (c == '\r') {
-				//lcd_goto(0x14);
-				i++;
+			} else if (x == 0 && y != 1) {
 				continue;
 			}
+			backspace(x, y);
+			x--;
+			continue;
+		}
+		else if (c == '\r') {
+			if (y == 1) continue;
+			y = 1;
+			x = 0;
+			lcd_goto(x, y);
+			continue;
+		} else {
 			lcd_putc(c);
-			i++;
+			x++;
 		}
 	}
+
+	while (1);
 }

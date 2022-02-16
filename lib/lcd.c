@@ -265,7 +265,7 @@ static void puth(unsigned n)
  * @param: `fmt` - the string to print.
  * @param: `...` - the list of variables to fill in.
  * */
-void lcd_printf(int x, int y, char *fmt, ...)
+void lcd_printf(char *fmt, ...)
 {
 	char *s;	// for dealing with string values
 	int n;
@@ -273,7 +273,6 @@ void lcd_printf(int x, int y, char *fmt, ...)
 
 	va_list ap;
 	va_start(ap, fmt);
-	place_cursor(x, y);
 
 	char *p = fmt;
 
