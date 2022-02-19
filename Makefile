@@ -12,18 +12,15 @@ CC=$(MSPGCCDIR)/bin/msp430-elf-gcc
 
 GDB=$(MSPGCCDIR)/bin/msp430-elf-gdb
 
+# place the .elf files in the elves dir
+BUILD=build
+
 # get all .c files
 SRCS=$(wildcard src/*.c)
 LIBS=$(wildcard lib/*.c)
 
-BINS=$(patsubst src/%.c, $(ELFDIR)/%.elf, $(SRCS))
+BINS=$(patsubst src/%.c, $(BUILD)/%.elf, $(SRCS))
 
-# assembly stuff
-ASM_SRCS=$(wildcard src/*.s)
-ASM_BINS=$(patsubst src/*.s, $(ELFDIR)/%.elf, $(ASM_SRCS))
-
-# place the .elf files in the elves dir
-ELFDIR=elves
 
 CFLAGS  = -I . -I $(INC_DIR) -mmcu=$(DEVICE)
 LFLAGS := -L . -L $(INC_DIR) -T $(DEVICE).ld
@@ -37,14 +34,14 @@ DRIVER:=tilib
 
 #------------------------------------------------#
 
-all: $(ELFDIR)/$(BINS)
+all: $(BUILD)/$(BINS)
 
-$(ELFDIR)/%.elf: src/%.c | $(ELFDIR)
+$(BUILD)/%.elf: src/%.c | $(BUILD)
 	$(CC) $(CFLAGS) $(LFLAGS) $(LIBS) $< -o $@
 
 
-$(ELFDIR):
-	mkdir -p $(ELFDIR)
+$(BUILD):
+	mkdir -p $(BUILD)
 
 
 # show compiler help menu
@@ -55,14 +52,14 @@ help:
 # usage: make gdb a=binary
 gdb:
 	mspdebug $(DRIVER) "gdb" & \
-	$(GDB) -q $(ELFDIR)/$(a).elf \
+	$(GDB) -q $(BUILD)/$(a).elf \
 	-ex "target remote localhost:2000"
 
 # upload to baord
 # USAGE: make install a=binary
 install:
-	mspdebug $(DRIVER) "prog $(ELFDIR)/$(a).elf" --allow-fw-update
+	mspdebug $(DRIVER) "prog $(BUILD)/$(a).elf" --allow-fw-update
 
 
 clean:
-	rm -rf elves
+	rm -rf $(BUILD)
