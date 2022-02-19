@@ -2,6 +2,8 @@
 
 This repo contains everything I learn about embedded systems and working with the `msp430fr5994` MCU. The purpose here is to provide an environment to quickly get working with minimal project setup and easily compile and flash programs to the board. This way I can also easily reference everything.
 
+The Makefile allows to experiment with minimal setup. All programs are in the `src` directory and exist as standalone programs. The Makefile builds all programs in the `src` directory.
+
 A quick rundown of what this repo contains:
 - Text editor development environment - write code with Vim instead of CCS. The `Makefile` handles everything.
 - A bunch of standalone, installable programs. See the [`src`](https://github.com/breakthatbass/msp430-env/tree/main/src) directory for a program list & descriptions. See [usage](https://github.com/breakthatbass/msp430-env/#Usage) below on how to install a program to your board.
