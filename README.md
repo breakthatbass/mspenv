@@ -1,4 +1,4 @@
-# msp430-env
+# mspenv
 
 This repo contains everything I learn about embedded systems and working with the `msp430fr5994` MCU. The purpose here is to provide an environment to quickly get working with minimal project setup and easily compile and flash programs to the board. This way I can also easily reference everything.
 
@@ -35,7 +35,7 @@ Compile all `.c` files (must be in the `src` directory):
 ```
 make
 ```
-Running `make` will compile all `.c` files into an equivalent `.elf` file and place them all in a directory named `elves`...🧝.
+Running `make` will compile all `.c` files into an equivalent `.elf` file and place them all in a directory named `build`.
 
 **Flashing**:
 ```
