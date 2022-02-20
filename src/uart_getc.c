@@ -7,6 +7,16 @@
 #include <msp430fr5994.h>
 #include <lib/uartio.h>
 
+#define BACKSPACE 0x7f
+
+
+void backspace(void)
+{
+    uart_putc('\b');
+    uart_putc(' ');
+    uart_putc('\b');
+}
+
 
 void main(void)
 {
@@ -28,15 +38,8 @@ void main(void)
             uart_putc('\n');
             uart_putc('\r');
 
-        /**
-         * reading in chars doesn't detect backspace as '\b'
-         * but instead as 0x7f. '\b' can be printed to move the
-         * cursor back one spot though.
-         * */
-        } else if (c == 0x7f) {
-            uart_putc('\b');
-            uart_putc(' ');
-            uart_putc('\b');
+        } else if (c == BACKSPACE) {
+            backspace();
 
         } else uart_putc(c);
     }

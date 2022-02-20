@@ -12,6 +12,7 @@
 #include "../lib/lcd.h"
 #include "../lib/uartio.h"
 
+#define BACKSPACE 0x7f
 
 // backspace: move back one space, print ' ' to erase byte, then move back to that spot.
 void backspace(int x, int y)
@@ -39,7 +40,7 @@ void main(void)
 	y = 0;
 
 	while ((c = uart_getc())) {
-		if (c == 0x7f) {
+		if (c == BACKSPACE) {
 			if (x == 0 && y == 1) {
 				x = 15;
 				y = 0;
