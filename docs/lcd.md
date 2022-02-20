@@ -62,11 +62,9 @@ move the cursor to a specific location.
 <br>
 
 ```C
-void lcd_printf(int x, int y, char *fmt, ...) 
+void lcd_printf(char *fmt, ...) 
 ```
 printf for the LCD. Conversions: `%x`, `%c`, `%d`, `%s`.
-- `x` - horizonal placement of cursor (0-15).
-- `y` - vertical placement of cursor (0-1).
 - `fmt` - the string to print.
 - `...` - the list of variables to fill in.
 

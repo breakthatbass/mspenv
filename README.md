@@ -7,7 +7,7 @@ The Makefile allows to experiment with minimal setup. All programs are in the `s
 A quick rundown of what this repo contains:
 - Text editor development environment - write code with Vim instead of CCS. The `Makefile` handles everything.
 - A bunch of standalone, installable programs. See the [`src`](https://github.com/breakthatbass/msp430-env/tree/main/src) directory for a program list & descriptions. See [usage](https://github.com/breakthatbass/msp430-env/#Usage) below on how to install a program to your board.
-- Libs/drivers - a uart library and an LCD driver library. See the [`lib`](https://github.com/breakthatbass/msp430-env/tree/main/lib) directory for source code, docs, and setup instructions.
+- Libs/drivers - libraries and drivers I developed and use in some of the programs here. See the [`lib`](https://github.com/breakthatbass/msp430-env/tree/main/lib) directory for source code, docs, and setup instructions.
 
 ## Setting up the development environment
 To do anything in this repo there is some setup. We'll need a compiler, header file libs, and something to flash the firmware onto the board.
@@ -17,14 +17,6 @@ And clone, build, and install [`mspdebug`](https://github.com/dlbeer/mspdebug) f
 
 For full setup instructions and more details than here, see the [setup page](https://github.com/breakthatbass/msp430-env/wiki/Setup#development-environment) in the [wiki](https://github.com/breakthatbass/msp430-env/wiki).
 
-<!--
-## Installation
-Run the following script to install and fresh template for a new project. You must still manually install the tools listed above.
-TODO: add mspdebug in the installation script
-```sh
-sh -c "`curl -fsSl https://raw.githubusercontent.com/breakthatbass/msp430-env/main/install.sh`"
-```
--->
 
 ## Usage
 
